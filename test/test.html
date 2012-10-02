@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Unit Tests - BubbleView</title>
+
+	<link rel="stylesheet" href="qunit/qunit.css" />
+</head>
+<body>
+	<h3>Having a tree structure of views `children 1, 2, 3` listening to `parent` listening to `grandparent`
+	view, we trigger events on the grandparent, and test the results on the children. The `parent` node will act just
+	as a transmitor</h3>
+	
+	<div id="qunit"></div>
+	
+	<!-- dependencies -->
+	<script src="../lib/underscore.js"></script>
+	<script src="../lib/jquery-1.8.2.js"></script>
+	<script src="../lib/backbone.js"></script>
+	
+	<!-- the decorator lib to test -->
+	<script src="../bubble-view.js"></script>
+	
+	<!-- vendor testing lib -->
+	<script src="qunit/qunit.js"></script>
+	
+	<!-- tests -->
+	<script src="test.js"></script>
+</body>
+</html>
