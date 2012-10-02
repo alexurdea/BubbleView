@@ -44,5 +44,5 @@ BubbleView = Backbone.View.extend({
     }
 
 }, {
-    eventsToListenFor: ['shown', 'hidden']
+    eventsToListenFor: []
 });

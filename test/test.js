@@ -7,7 +7,8 @@ module("BubbleView", {
 		eventsFired = {
 			'child1': {
 				'hidden': false,
-				'shown': false
+				'shown': false,
+				'deleted': false
 			},
 			'child2': {
 				'hidden': false,
@@ -30,8 +31,9 @@ module("BubbleView", {
 		/* User constructors */
 
 		/*
-		 * Parent view doesn't have any events declared in `eventsToListenFor`.
-		 * It should still conduct them through.
+		 * Parent view will only conduct events declared in `eventsToListenFor`.
+		 * These events will go through to the clildren, although the parent doesn't have any
+		 * handlers for them.
 		 */ 
 		ParentView = BubbleView.extend({
 			shown: function(){
@@ -40,6 +42,8 @@ module("BubbleView", {
 		    hidden: function(){
 		        eventsFired['parent']['hidden'] = true;
 		    }
+		}, {
+			eventsToListenFor: ['shown', 'hidden']
 		});
 
 		/* 
@@ -52,9 +56,12 @@ module("BubbleView", {
 		    },
 		    hidden: function(){
 		        eventsFired['child1']['hidden'] = true;
+		    },
+		    deleted: function(){
+		    	eventsFired['child1']['deleted'] = true;
 		    }
 		}, {
-			eventsToListenFor: ['shown', 'hidden']
+			eventsToListenFor: ['shown', 'hidden', 'deleted']
 		});
 
 		/*
@@ -128,4 +135,10 @@ test("When a BubbleView extension lists bubble events in `eventsToListenFor`, an
 
 	equal(eventsFired['child1']['shown'], true, "`shown` has been triggered.");
 	equal(eventsFired['child1']['hidden'], true, "`hidden` has been triggered.");
+});
+
+test("An event that is not in the parent's `eventsToListenFor` array should not be conducted through.", function(){
+	gramps.trigger("deleted");
+
+	equal(eventsFired['child1']['deleted'], false, "`deleted` has not been triggered.");
 });
