@@ -5,12 +5,10 @@ if (!Backbone){
 }
 
 BubbleView = Backbone.View.extend({
-    initialize: function(){
-        this.boundMethods = {};
-    },
-
     bindToParent: function(parent){
         var i, event;
+
+        this.boundMethods || (this.boundMethods = {});
 
         this.parent = parent;
         for (i = 0; i < this.constructor.eventsToListenFor.length; i++){
@@ -35,12 +33,16 @@ BubbleView = Backbone.View.extend({
     unbindFromParent: function(){
         var event;
 
+        if (!this.boundMethods) return;
+
         for (event in this.boundMethods){
             if (this.boundMethods.hasOwnProperty(event)){
                 this.parent.unbind(event, this.boundMethods[event], this);
                 delete this.boundMethods[event];
             }
         }
+
+        delete this.parent;
     }
 
 }, {
