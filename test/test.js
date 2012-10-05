@@ -31,7 +31,7 @@ module("BubbleView", {
 		/* User constructors */
 
 		/*
-		 * Parent view will only conduct events declared in `eventsToListenFor`.
+		 * Parent view will only conduct events declared in `bubbleEvents`.
 		 * These events will go through to the clildren, although the parent doesn't have any
 		 * handlers for them.
 		 */ 
@@ -43,11 +43,11 @@ module("BubbleView", {
 		        eventsFired['parent']['hidden'] = true;
 		    }
 		}, {
-			eventsToListenFor: ['shown', 'hidden']
+			bubbleEvents: ['shown', 'hidden']
 		});
 
 		/* 
-		 * This extension has both event handlers, as well as the eventsToListenFor on the constructor. 
+		 * This extension has both event handlers, as well as the bubbleEvents on the constructor. 
 		 * It should respond to both events. 
 		 */
 		ChildView1 = BubbleView.extend({
@@ -61,11 +61,11 @@ module("BubbleView", {
 		    	eventsFired['child1']['deleted'] = true;
 		    }
 		}, {
-			eventsToListenFor: ['shown', 'hidden', 'deleted']
+			bubbleEvents: ['shown', 'hidden', 'deleted']
 		});
 
 		/*
-		 * This extension has both events in eventsToListenFor, but only the 'hidden' handler defined.
+		 * This extension has both events in bubbleEvents, but only the 'hidden' handler defined.
 		 * It should only respond to the 'hidden event'.
 		 */ 
 		ChildView2 = BubbleView.extend({
@@ -73,11 +73,11 @@ module("BubbleView", {
 		        eventsFired['child2']['hidden'] = true;
 		    }
 		}, {
-			eventsToListenFor: ['shown', 'hidden']
+			bubbleEvents: ['shown', 'hidden']
 		});
 
 		/*
-		 * This extension has both handlers, but none of the two events is in eventsToListenFor.
+		 * This extension has both handlers, but none of the two events is in bubbleEvents.
 		 * It should respond to neither of them.
 		 */
 		ChildView3 = BubbleView.extend({
@@ -88,7 +88,7 @@ module("BubbleView", {
 		        eventsFired['child3']['hidden'] = true;
 		    }
 		}, {
-			eventsToListenFor: ['some other event']
+			bubbleEvents: ['some other event']
 		});
 
 		// instances
@@ -113,7 +113,7 @@ test("Instances created", function(){
 	ok(child3 instanceof BubbleView);
 });
 
-test("A BubbleView extension that does not have certain events listed in `eventsToListenFor`, \
+test("A BubbleView extension that does not have certain events listed in `bubbleEvents`, \
 	should not respond to them, even when the handling methods are defined", function(){
 	gramps.trigger('shown').trigger('hidden');
 
@@ -122,14 +122,14 @@ test("A BubbleView extension that does not have certain events listed in `events
 });
 
 test("When a BubbleView extension doesn't have a handler defined for an event defined in \
-	`eventsToListenFor`, it should not respond to that event, and not throw an error either.", function(){
+	`bubbleEvents`, it should not respond to that event, and not throw an error either.", function(){
 	gramps.trigger('shown').trigger('hidden');
 
 	equal(eventsFired['child2']['shown'], false, "`shown` has no handler, therefore, it has not been triggered.");
 	equal(eventsFired['child2']['hidden'], true, "`hidden` has been triggered.");
 });
 
-test("When a BubbleView extension lists bubble events in `eventsToListenFor`, and defines handlers \
+test("When a BubbleView extension lists bubble events in `bubbleEvents`, and defines handlers \
 	for those events, then it should react to them.", function(){
 	gramps.trigger('shown').trigger('hidden');
 
@@ -137,7 +137,7 @@ test("When a BubbleView extension lists bubble events in `eventsToListenFor`, an
 	equal(eventsFired['child1']['hidden'], true, "`hidden` has been triggered.");
 });
 
-test("An event that is not in the parent's `eventsToListenFor` array should not be conducted through.", function(){
+test("An event that is not in the parent's `bubbleEvents` array should not be conducted through.", function(){
 	gramps.trigger("deleted");
 
 	equal(eventsFired['child1']['deleted'], false, "`deleted` has not been triggered.");

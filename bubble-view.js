@@ -12,7 +12,7 @@ BubbleView = Backbone.View.extend({
         this.boundMethods || (this.boundMethods = {});
 
         this.parent = parent;
-        _.each(this.constructor.eventsToListenFor, function(event){
+        _.each(this.constructor.bubbleEvents, function(event){
             self._makeBoundMethod(event);
         });
     },
@@ -46,5 +46,5 @@ BubbleView = Backbone.View.extend({
     }
 
 }, {
-    eventsToListenFor: []
+    bubbleEvents: []
 });
